@@ -6,6 +6,8 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
+    "@elysiajs/cron": "^0.7.0",
+    "axios": "^1.5.1",
     "elysia": "latest"
   },
   "devDependencies": {
