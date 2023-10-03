@@ -16,7 +16,7 @@ const app = new Elysia()
   .use(
     cron({
       name: "SendEmail",
-      pattern: "* * */24 * * *",
+      pattern: "0 0 * * *", //Hver dag kl 00:00
       run() {
         console.log("Send Email");
         instance.post("email", {
