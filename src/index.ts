@@ -1,6 +1,8 @@
 import { Elysia } from "elysia";
 import { cron } from "@elysiajs/cron";
 import axios from "axios";
+import fs from "fs";
+import path from "path";
 
 const instance = axios.create({
   baseURL: "https://api.postmarkapp.com/",
@@ -11,6 +13,14 @@ const instance = axios.create({
     "X-Postmark-Server-Token": `${process.env.POSTMARK_TOKEN}`,
   },
 });
+
+let daysFeatureRequests = [] as string[];
+
+const getFeatureRequests = () => {
+  let template = path.join(import.meta.dir, "/Email/emailtemplate.html");
+
+  return fs.readFileSync(template, "utf8");
+};
 
 const app = new Elysia()
   .use(
@@ -32,12 +42,12 @@ const app = new Elysia()
       },
     })
   )
-  .get("/", async () => {
+  .get("/debug/sendMail", async () => {
     const results = await instance.post("email", {
       From: "uclfeedback@webdock.io",
       To: "mikehovedskov@gmail.com", //Ændre til deres mail
       Subject: "Test",
-      HtmlBody: '<b>Hello</b> <img src="cid:image.jpg"/>',
+      HtmlBody: getFeatureRequests(),
       TextBody: "Hello",
       TrackOpens: true,
       TrackLinks: "None",
